@@ -175,6 +175,15 @@ task-master next
 
 # Generate task files
 task-master generate
+
+# Start the realtime board server
+task-master server start
+```
+
+Open <http://localhost:3000> in your browser to see the Tailwind styled board. Tasks move across columns in real time using shadcn-inspired cards. Stop the server with:
+
+```bash
+task-master server stop
 ```
 
 ## Documentation

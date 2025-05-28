@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Task Board</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@3.4.4/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100 font-sans">
+    <div class="container mx-auto py-6">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4" id="board">
+            <div id="pending" class="bg-white rounded shadow">
+                <h2 class="px-4 py-2 text-lg font-semibold border-b">pending</h2>
+                <div class="p-4 space-y-2 tasks"></div>
+            </div>
+            <div id="in-progress" class="bg-white rounded shadow">
+                <h2 class="px-4 py-2 text-lg font-semibold border-b">in-progress</h2>
+                <div class="p-4 space-y-2 tasks"></div>
+            </div>
+            <div id="done" class="bg-white rounded shadow">
+                <h2 class="px-4 py-2 text-lg font-semibold border-b">done</h2>
+                <div class="p-4 space-y-2 tasks"></div>
+            </div>
+        </div>
+    </div>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        const socket = io();
+        const statuses = ['pending','in-progress','done'];
+        function render(data){
+            statuses.forEach(status=>{
+                const col = document.querySelector(`#${status} .tasks`);
+                if(col) col.innerHTML = '';
+            });
+            (data.tasks||[]).forEach(t => {
+                const col = document.querySelector(`#${t.status || 'pending'} .tasks`);
+                if(col){
+                    const card = document.createElement('div');
+                    card.className = 'bg-gray-50 rounded-md p-2 shadow-sm';
+                    card.textContent = t.title;
+                    col.appendChild(card);
+                }
+            });
+        }
+        socket.on('tasks', render);
+    </script>
+</body>
+</html>

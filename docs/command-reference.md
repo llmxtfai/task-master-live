@@ -262,3 +262,15 @@ task-master models --setup
 ```
 
 Configuration is stored in `.taskmasterconfig` in your project root. API keys are still managed via `.env` or MCP configuration. Use `task-master models` without flags to see available built-in models. Use `--setup` for a guided experience.
+
+## Board Server
+
+```bash
+# Start the real-time board server
+task-master server start
+
+# Stop the board server
+task-master server stop
+```
+
+Open <http://localhost:3000> in your browser to view the Tailwind-powered board. Changes to `tasks.json` are pushed live to all connected clients using shadcn-style cards.
