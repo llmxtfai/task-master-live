@@ -27,6 +27,8 @@ import { fileURLToPath } from 'url';
 import { dirname, resolve } from 'path';
 import { createRequire } from 'module';
 import { spawn } from 'child_process';
+import fs from 'fs';
+import http from 'http';
 import { Command } from 'commander';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -38,6 +40,7 @@ const packageJson = require('./package.json');
 
 // Export the path to the dev.js script for programmatic usage
 export const devScriptPath = resolve(__dirname, './scripts/dev.js');
+export const boardServerPath = resolve(__dirname, './board-server/server.js');
 
 // Export a function to initialize a new project programmatically
 export const initProject = async (options = {}) => {
@@ -137,19 +140,52 @@ if (import.meta.url === `file://${process.argv[1]}`) {
 			});
 		});
 
-	program
-		.command('generate')
-		.description('Generate task files')
-		.action(() => {
-			const child = spawn('node', [devScriptPath, 'generate'], {
-				stdio: 'inherit',
-				cwd: process.cwd()
-			});
+        program
+                .command('generate')
+                .description('Generate task files')
+                .action(() => {
+                        const child = spawn('node', [devScriptPath, 'generate'], {
+                                stdio: 'inherit',
+                                cwd: process.cwd()
+                        });
 
-			child.on('close', (code) => {
-				process.exit(code);
-			});
-		});
+                        child.on('close', (code) => {
+                                process.exit(code);
+                        });
+                });
+
+        const serverCmd = program.command('server').description('Manage the board server');
+
+        serverCmd
+                .command('start')
+                .description('Start the board server')
+                .action(() => {
+                        const child = spawn('node', [boardServerPath], {
+                                stdio: 'inherit',
+                                cwd: process.cwd(),
+                                detached: true
+                        });
+                        fs.writeFileSync('.board-server.pid', String(child.pid));
+                        child.unref();
+                });
+
+        serverCmd
+                .command('stop')
+                .description('Stop the board server')
+                .action(() => {
+                        const pidFile = '.board-server.pid';
+                        if (fs.existsSync(pidFile)) {
+                                const pid = parseInt(fs.readFileSync(pidFile, 'utf8'), 10);
+                                try {
+                                        process.kill(pid);
+                                        fs.unlinkSync(pidFile);
+                                        return;
+                                } catch (err) {
+                                        console.error('Failed to kill server process:', err.message);
+                                }
+                        }
+                        http.request({ method: 'POST', host: 'localhost', port: 3000, path: '/shutdown' }, () => {}).end();
+                });
 
 	program.parse(process.argv);
 }
