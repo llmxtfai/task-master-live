@@ -12,8 +12,6 @@
 
 A task management system for AI-driven development with Claude, designed to work seamlessly with Cursor AI.
 
----
-
 ## Requirements
 
 Task Master Live uses AI across several commands, requiring a separate API key. You can use a variety of models from different AI providers if you include their API keys.
@@ -27,8 +25,6 @@ At least ONE API key is required (adding more allows seamless switching):
 - xAI API key
 - OpenRouter API Key
 
----
-
 ## Quick Start
 
 ### Option 1: MCP (Recommended)
@@ -37,14 +33,14 @@ At least ONE API key is required (adding more allows seamless switching):
 
 | Editor       | Scope   | Linux/macOS Path                      | Windows Path                                      | Key          |
 | ------------ | ------- | ------------------------------------- | ------------------------------------------------- | ------------ |
-| **Cursor**   | Global  | `~/.cursor/mcp.json`                  | `%USERPROFILE%\.cursor\mcp.json`                  | `mcpServers` |
-|              | Project | `<project_folder>/.cursor/mcp.json`   | `<project_folder>\.cursor\mcp.json`               | `mcpServers` |
+| **Cursor**   | Global  | `~/.cursor/mcp.json`                  | `%USERPROFILE%\.cursor\mcp.json`                | `mcpServers` |
+|              | Project | `<project_folder>/.cursor/mcp.json`   | `<project_folder>\.cursor\mcp.json`             | `mcpServers` |
 | **Windsurf** | Global  | `~/.codeium/windsurf/mcp_config.json` | `%USERPROFILE%\.codeium\windsurf\mcp_config.json` | `mcpServers` |
-| **VS Code**  | Project | `<project_folder>/.vscode/mcp.json`   | `<project_folder>\.vscode\mcp.json`               | `servers`    |
+| **VS Code**  | Project | `<project_folder>/.vscode/mcp.json`   | `<project_folder>\.vscode\mcp.json`             | `servers`    |
 
 ##### MCP Config Example
 
-```jsonc
+```json
 {
   "mcpServers": {
     "task-master-live": {
@@ -63,3 +59,118 @@ At least ONE API key is required (adding more allows seamless switching):
     }
   }
 }
+```
+
+> 🔑 Replace placeholder API keys with your actual keys. Remove any you’re not using.
+
+#### 2. Cursor Setup
+
+Enable **Task Master Live** under Cursor ➝ Settings ➝ MCP tab.
+
+#### 3. Model Configuration (Optional)
+
+In your editor AI chat pane:
+
+```
+Change the main, research and fallback models to <model_name>, <model_name> and <model_name> respectively.
+```
+
+#### 4. Initialize in your Project
+
+In the chat pane:
+
+```
+Initialize task-master-live in my project
+```
+
+#### 5. Add a PRD
+
+Ensure you have `scripts/prd.txt` in your project folder. Example available at `scripts/example_prd.txt`.
+
+#### 6. Common AI Chat Commands
+
+- `Can you parse my PRD at scripts/prd.txt?`
+- `What’s the next task I should work on?`
+- `Can you help me implement task 3?`
+- `Can you help me expand task 4?`
+
+### Option 2: Using Command Line
+
+#### Installation
+
+```bash
+npm install -g task-master-live
+# OR
+npm install task-master-live
+```
+
+#### CLI Commands
+
+```bash
+task-master-live init
+task-master-live parse-prd your-prd.txt
+task-master-live list
+task-master-live next
+task-master-live generate
+task-master-live server start
+```
+
+Visit `http://localhost:3000` to view the task board.
+
+Stop with:
+
+```bash
+task-master-live server stop
+```
+
+## Documentation
+
+- [Configuration Guide](docs/configuration.md)
+- [Tutorial](docs/tutorial.md)
+- [Command Reference](docs/command-reference.md)
+- [Task Structure](docs/task-structure.md)
+- [Example Interactions](docs/examples.md)
+
+## Troubleshooting
+
+If `task-master-live init` hangs:
+
+```bash
+node node_modules/task-master-live/scripts/init.js
+```
+
+Or clone and run:
+
+```bash
+git clone https://github.com/eyaltoledano/claude-task-master.git
+cd claude-task-master
+node scripts/init.js
+```
+
+## Contributors
+
+<a href="https://github.com/eyaltoledano/claude-task-master/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=eyaltoledano/claude-task-master" />
+</a>
+
+## Star History
+
+[![Star History Chart](https://api.star-history.com/svg?repos=eyaltoledano/claude-task-master&type=Timeline)](https://www.star-history.com/#eyaltoledano/claude-task-master&Timeline)
+
+## License
+
+Licensed under **MIT with Commons Clause**.
+
+✅ Permitted:
+
+- Use in personal/commercial/academic projects
+- Modify and distribute
+- Build products using Task Master Live
+
+❌ Forbidden:
+
+- Sell Task Master Live directly
+- Offer it as a hosted service
+- Create competitors based on the code
+
+See [LICENSE](LICENSE) for details.
